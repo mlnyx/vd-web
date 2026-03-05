@@ -51,57 +51,83 @@ export function validateHeadPose(
 }
 
 /**
- * 3x3 회전 행렬의 역행렬(전치)을 적용하여 포인트를 정면 등가 좌표로 보정
+ * 4x4 column-major 변환 행렬의 역행렬 계산
+ * MediaPipe facialTransformationMatrixes는 rigid transform (회전 + 이동)이므로
+ * 역행렬 = [R^T | -R^T * t]
  */
-function applyInverseRotation(
-  point: NormalizedLandmark,
-  rot: number[], // 3x3 row-major
-  center: NormalizedLandmark
-): NormalizedLandmark {
-  // center 기준 상대 좌표
-  const dx = point.x - center.x;
-  const dy = point.y - center.y;
-  const dz = point.z - center.z;
+function invertTransformMatrix(m: number[]): number[] {
+  // column-major 접근: M[row][col] = m[col * 4 + row]
+  // 회전 부분 전치 (R^T)
+  const r00 = m[0], r10 = m[1], r20 = m[2];
+  const r01 = m[4], r11 = m[5], r21 = m[6];
+  const r02 = m[8], r12 = m[9], r22 = m[10];
+  // 이동 부분
+  const tx = m[12], ty = m[13], tz = m[14];
 
-  // 역회전 (전치 행렬 적용)
-  return {
-    x: center.x + rot[0] * dx + rot[3] * dy + rot[6] * dz,
-    y: center.y + rot[1] * dx + rot[4] * dy + rot[7] * dz,
-    z: center.z + rot[2] * dx + rot[5] * dy + rot[8] * dz,
-  };
-}
+  // -R^T * t
+  const itx = -(r00 * tx + r10 * ty + r20 * tz);
+  const ity = -(r01 * tx + r11 * ty + r21 * tz);
+  const itz = -(r02 * tx + r12 * ty + r22 * tz);
 
-/**
- * 4x4 변환 행렬에서 3x3 회전 부분 추출 (row-major)
- */
-function extractRotation3x3(matrixData: number[]): number[] {
-  // column-major 4x4 → row-major 3x3
+  // column-major 출력
   return [
-    matrixData[0], matrixData[4], matrixData[8],
-    matrixData[1], matrixData[5], matrixData[9],
-    matrixData[2], matrixData[6], matrixData[10],
+    r00, r01, r02, 0,
+    r10, r11, r12, 0,
+    r20, r21, r22, 0,
+    itx, ity, itz, 1,
   ];
 }
 
 /**
- * 전체 Willis 키포인트에 역회전 보정 적용
- * 얼굴 중심(코 끝)을 기준으로 역회전
+ * 4x4 column-major 행렬을 3D 점에 적용
  */
-export function correctKeypointsForPose(
-  keypoints: WillisKeypoints,
-  matrixData: number[]
-): WillisKeypoints {
-  const rot = extractRotation3x3(matrixData);
-
-  // 얼굴 중심: subnasale 사용
-  const center = keypoints.subnasale;
-
+function applyMatrix4x4(
+  m: number[],
+  x: number,
+  y: number,
+  z: number
+): NormalizedLandmark {
   return {
-    leftPupil: applyInverseRotation(keypoints.leftPupil, rot, center),
-    rightPupil: applyInverseRotation(keypoints.rightPupil, rot, center),
-    subnasale: keypoints.subnasale, // 중심점은 그대로
-    rimaOris: applyInverseRotation(keypoints.rimaOris, rot, center),
-    chin: applyInverseRotation(keypoints.chin, rot, center),
+    x: m[0] * x + m[4] * y + m[8] * z + m[12],
+    y: m[1] * x + m[5] * y + m[9] * z + m[13],
+    z: m[2] * x + m[6] * y + m[10] * z + m[14],
+  };
+}
+
+/**
+ * 정규화 좌표 → metric 3D 좌표 변환 (1점)
+ * 1) 정규화 좌표를 화면 좌표로 변환 (z는 x와 같은 스케일)
+ * 2) facialTransformationMatrixes 역행렬 적용 → canonical space (cm 단위)
+ */
+function toMetric3DPoint(
+  point: NormalizedLandmark,
+  invMatrix: number[],
+  imageWidth: number,
+  imageHeight: number,
+): NormalizedLandmark {
+  const sx = point.x * imageWidth;
+  const sy = point.y * imageHeight;
+  const sz = point.z * imageWidth; // z는 x와 같은 스케일 (MediaPipe 명세)
+  return applyMatrix4x4(invMatrix, sx, sy, sz);
+}
+
+/**
+ * 전체 Willis 키포인트를 metric 3D 좌표로 변환
+ * facialTransformationMatrixes의 역행렬을 적용하여 자세에 무관한 좌표 복원
+ */
+export function toMetric3DKeypoints(
+  keypoints: WillisKeypoints,
+  matrixData: number[],
+  imageWidth: number,
+  imageHeight: number,
+): WillisKeypoints {
+  const inv = invertTransformMatrix(matrixData);
+  return {
+    leftPupil: toMetric3DPoint(keypoints.leftPupil, inv, imageWidth, imageHeight),
+    rightPupil: toMetric3DPoint(keypoints.rightPupil, inv, imageWidth, imageHeight),
+    subnasale: toMetric3DPoint(keypoints.subnasale, inv, imageWidth, imageHeight),
+    rimaOris: toMetric3DPoint(keypoints.rimaOris, inv, imageWidth, imageHeight),
+    chin: toMetric3DPoint(keypoints.chin, inv, imageWidth, imageHeight),
   };
 }
 

@@ -1,5 +1,5 @@
-import type { WillisKeypoints } from "../mediapipe/types";
-import { correctKeypointsForPose } from "../mediapipe/headPose";
+import type { NormalizedLandmark, WillisKeypoints } from "../mediapipe/types";
+import { toMetric3DKeypoints } from "../mediapipe/headPose";
 
 /**
  * Willis 비율 계산 (논문 원법)
@@ -66,14 +66,36 @@ export function isPupilAlignmentOk(
 }
 
 /**
- * Head Pose 보정된 Willis 비율 계산
- * 4x4 변환 행렬의 역회전을 키포인트에 적용 후 비율 계산
+ * 3D 유클리드 거리 기반 Willis 비율 계산
+ * metric 3D 좌표 (cm 단위)에서 x, y, z 모두 사용
+ */
+export function calculateWillisRatio3D(keypoints: WillisKeypoints): number {
+  const dist3d = (a: NormalizedLandmark, b: NormalizedLandmark) =>
+    Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z);
+
+  // 동공 중점 (3D)
+  const pupilMid: NormalizedLandmark = {
+    x: (keypoints.leftPupil.x + keypoints.rightPupil.x) / 2,
+    y: (keypoints.leftPupil.y + keypoints.rightPupil.y) / 2,
+    z: (keypoints.leftPupil.z + keypoints.rightPupil.z) / 2,
+  };
+
+  const pupilToRima = dist3d(pupilMid, keypoints.rimaOris);
+  const subnasaleToChin = dist3d(keypoints.subnasale, keypoints.chin);
+
+  if (pupilToRima === 0) return 0;
+  return subnasaleToChin / pupilToRima;
+}
+
+/**
+ * Metric 3D 좌표 기반 Head Pose 보정 Willis 비율 계산
+ * facialTransformationMatrixes 역행렬로 canonical space 복원 후 3D 거리 계산
  */
 export function calculateCorrectedWillisRatio(
   keypoints: WillisKeypoints,
   matrixData: number[],
-  imageSize?: { width: number; height: number }
+  imageSize: { width: number; height: number }
 ): number {
-  const corrected = correctKeypointsForPose(keypoints, matrixData);
-  return calculateWillisRatio(corrected, imageSize);
+  const metric = toMetric3DKeypoints(keypoints, matrixData, imageSize.width, imageSize.height);
+  return calculateWillisRatio3D(metric);
 }
