@@ -1,0 +1,22 @@
+{
+  "name": "Cnalytics VD Assessment",
+  "short_name": "Cnalytics VD",
+  "description": "Willis 안면 비율법 기반 VD 평가 앱",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0f0f8",
+  "theme_color": "#1B1464",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
