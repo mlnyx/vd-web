@@ -167,6 +167,7 @@ export const FaceLandmarkerView = forwardRef<
             let poseValid = true;
             let ratio: number;
 
+            const imageSize = { width: canvas.width, height: canvas.height };
             const matrices = result.facialTransformationMatrixes;
             if (matrices && matrices.length > 0) {
               const matrixData = Array.from(matrices[0].data);
@@ -175,10 +176,10 @@ export const FaceLandmarkerView = forwardRef<
               poseValid = validation.isValid;
 
               // 보정된 비율 계산
-              ratio = calculateCorrectedWillisRatio(keypoints, matrixData);
+              ratio = calculateCorrectedWillisRatio(keypoints, matrixData, imageSize);
             } else {
               // 폴백: 보정 없이 계산
-              ratio = calculateWillisRatio(keypoints);
+              ratio = calculateWillisRatio(keypoints, imageSize);
             }
 
             const verdict = assessVD(ratio);
@@ -423,13 +424,14 @@ export const FaceLandmarkerView = forwardRef<
         // Head Pose 보정 적용
         let headPose: HeadPose | undefined;
         let ratio: number;
+        const imageSize = { width: video.videoWidth, height: video.videoHeight };
         const matrices = result.facialTransformationMatrixes;
         if (matrices && matrices.length > 0) {
           const matrixData = Array.from(matrices[0].data);
           headPose = extractHeadPose(matrixData);
-          ratio = calculateCorrectedWillisRatio(keypoints, matrixData);
+          ratio = calculateCorrectedWillisRatio(keypoints, matrixData, imageSize);
         } else {
-          ratio = calculateWillisRatio(keypoints);
+          ratio = calculateWillisRatio(keypoints, imageSize);
         }
 
         // 안정화된 중앙값 사용 (버퍼에 값이 있으면)
@@ -545,6 +547,7 @@ function drawOverlay(
     x: (leftPupil.x + rightPupil.x) / 2,
     y: (leftPupil.y + rightPupil.y) / 2,
   };
+  const rimaOris = mirror(keypoints.rimaOris);
   const subnasale = mirror(keypoints.subnasale);
   const chin = mirror(keypoints.chin);
 
@@ -557,16 +560,16 @@ function drawOverlay(
   ctx.lineTo(rightPupil.x, rightPupil.y);
   ctx.stroke();
 
-  // 상부 거리 (녹색 실선)
+  // 동공~구열 거리 (녹색 실선)
   ctx.setLineDash([]);
   ctx.strokeStyle = "#22C55E";
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(pupilMid.x, pupilMid.y);
-  ctx.lineTo(subnasale.x, subnasale.y);
+  ctx.lineTo(rimaOris.x, rimaOris.y);
   ctx.stroke();
 
-  // 하부 거리 (주황 실선)
+  // 비하점~턱끝 거리 (주황 실선)
   ctx.strokeStyle = "#F59E0B";
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -578,7 +581,8 @@ function drawOverlay(
   const points = [
     { p: leftPupil, color: "#60A5FA", r: 4 },
     { p: rightPupil, color: "#60A5FA", r: 4 },
-    { p: subnasale, color: "#22C55E", r: 4 },
+    { p: rimaOris, color: "#22C55E", r: 4 },
+    { p: subnasale, color: "#F59E0B", r: 4 },
     { p: chin, color: "#F59E0B", r: 4 },
   ];
   for (const { p, color, r } of points) {

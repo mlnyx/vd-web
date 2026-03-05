@@ -1,8 +1,8 @@
 import type { VDVerdict } from "../store/assessmentStore";
 
-// Willis 비율 정상 범위 (범위 기반 판정)
-export const WILLIS_RANGE_MIN = 0.9;
-export const WILLIS_RANGE_MAX = 1.5;
+// Willis 비율 정상 범위 (논문 기준 1:1 ± 15%)
+export const WILLIS_RANGE_MIN = 0.85;
+export const WILLIS_RANGE_MAX = 1.15;
 
 // 하위 호환용 (기존 코드 참조)
 export const WILLIS_THRESHOLD = WILLIS_RANGE_MIN;

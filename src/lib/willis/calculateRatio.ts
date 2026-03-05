@@ -2,30 +2,43 @@ import type { WillisKeypoints } from "../mediapipe/types";
 import { correctKeypointsForPose } from "../mediapipe/headPose";
 
 /**
- * Willis 비율 계산
+ * Willis 비율 계산 (논문 원법)
  *
- * Willis 비율 = (동공~비하점 거리) / (비하점~턱끝 거리)
- * - 동공 Y = 좌우 홍채 중심의 Y 평균
- * - 비하점 Y = subnasale Y
- * - 턱끝 Y = chin Y
+ * Willis 비율 = (비하점~턱끝 거리) / (동공~구열 거리)
+ * - 동공 = 좌우 홍채 중심의 중점
+ * - 구열 = 상하 입술 중앙
+ * - 비하점 = subnasale (인덱스 94)
+ * - 턱끝 = chin (인덱스 152)
  *
- * 정규화 좌표(0~1) 기준이므로 이미지 크기와 무관
+ * 2D 유클리드 거리 사용 + aspect ratio 보정
  */
-export function calculateWillisRatio(keypoints: WillisKeypoints): number {
-  // 동공 Y 좌표 평균
-  const pupilY = (keypoints.leftPupil.y + keypoints.rightPupil.y) / 2;
-  const subnasaleY = keypoints.subnasale.y;
-  const chinY = keypoints.chin.y;
+export function calculateWillisRatio(
+  keypoints: WillisKeypoints,
+  imageSize?: { width: number; height: number }
+): number {
+  // aspect ratio 보정 스케일 팩터
+  const scaleX = imageSize?.width ?? 1;
+  const scaleY = imageSize?.height ?? 1;
 
-  // 상부 거리: 동공 → 비하점
-  const upperDistance = Math.abs(subnasaleY - pupilY);
-  // 하부 거리: 비하점 → 턱끝
-  const lowerDistance = Math.abs(chinY - subnasaleY);
+  const dist = (ax: number, ay: number, bx: number, by: number) => {
+    const dx = (ax - bx) * scaleX;
+    const dy = (ay - by) * scaleY;
+    return Math.hypot(dx, dy);
+  };
+
+  // 동공 중점
+  const pupilX = (keypoints.leftPupil.x + keypoints.rightPupil.x) / 2;
+  const pupilY = (keypoints.leftPupil.y + keypoints.rightPupil.y) / 2;
+
+  // 동공~구열 거리
+  const pupilToRima = dist(pupilX, pupilY, keypoints.rimaOris.x, keypoints.rimaOris.y);
+  // 비하점~턱끝 거리
+  const subnasaleToChin = dist(keypoints.subnasale.x, keypoints.subnasale.y, keypoints.chin.x, keypoints.chin.y);
 
   // 분모가 0이면 비율 계산 불가
-  if (lowerDistance === 0) return 0;
+  if (pupilToRima === 0) return 0;
 
-  return upperDistance / lowerDistance;
+  return subnasaleToChin / pupilToRima;
 }
 
 /**
@@ -58,8 +71,9 @@ export function isPupilAlignmentOk(
  */
 export function calculateCorrectedWillisRatio(
   keypoints: WillisKeypoints,
-  matrixData: number[]
+  matrixData: number[],
+  imageSize?: { width: number; height: number }
 ): number {
   const corrected = correctKeypointsForPose(keypoints, matrixData);
-  return calculateWillisRatio(corrected);
+  return calculateWillisRatio(corrected, imageSize);
 }

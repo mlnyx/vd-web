@@ -7,8 +7,8 @@ export const LANDMARK_INDICES = {
   LEFT_IRIS_CENTER: 468,
   RIGHT_IRIS_CENTER: 473,
 
-  // 비하점 (Subnasale) — 코 밑 중앙 최하점
-  SUBNASALE: 2,
+  // 비하점 (Subnasale) — 코 밑 중앙
+  SUBNASALE: 94,
 
   // 구렬 (Rima Oris) — 상하 입술 중앙
   UPPER_LIP_CENTER: 13,
