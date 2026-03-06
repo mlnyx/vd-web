@@ -4,8 +4,8 @@
   "description": "Willis 안면 비율법 기반 VD 평가 앱",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f0f0f8",
-  "theme_color": "#1B1464",
+  "background_color": "#111315",
+  "theme_color": "#111315",
   "orientation": "portrait-primary",
   "icons": [
     {

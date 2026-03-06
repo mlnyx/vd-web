@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { PhotoResult } from "@/lib/store/assessmentStore";
 import { isNormalRange } from "@/lib/willis/assessVD";
 import { ArrowRight } from "lucide-react";
@@ -7,7 +8,7 @@ interface BeforeAfterViewProps {
   after: PhotoResult;
 }
 
-export function BeforeAfterView({ before, after }: BeforeAfterViewProps) {
+export const BeforeAfterView = memo(function BeforeAfterView({ before, after }: BeforeAfterViewProps) {
   const ratioDiff = (after.willisRatio ?? 0) - (before.willisRatio ?? 0);
 
   return (
@@ -32,15 +33,15 @@ export function BeforeAfterView({ before, after }: BeforeAfterViewProps) {
           <span
             className={`mt-2 text-xl font-bold ${
               isNormalRange(before.willisRatio ?? 0)
-                ? "text-green-600"
-                : "text-red-600"
+                ? "text-green-400"
+                : "text-red-400"
             }`}
           >
             {before.willisRatio?.toFixed(3) ?? "-"}
           </span>
           <span
             className={`text-xs font-semibold ${
-              before.verdict === "NORMAL" ? "text-green-500" : "text-red-500"
+              before.verdict === "NORMAL" ? "text-green-400" : "text-red-400"
             }`}
           >
             {before.verdict ?? "-"}
@@ -53,7 +54,7 @@ export function BeforeAfterView({ before, after }: BeforeAfterViewProps) {
           {ratioDiff !== 0 && (
             <span
               className={`mt-1 text-xs font-bold ${
-                ratioDiff > 0 ? "text-green-500" : "text-red-500"
+                ratioDiff > 0 ? "text-green-400" : "text-red-400"
               }`}
             >
               {ratioDiff > 0 ? "+" : ""}
@@ -79,15 +80,15 @@ export function BeforeAfterView({ before, after }: BeforeAfterViewProps) {
           <span
             className={`mt-2 text-xl font-bold ${
               isNormalRange(after.willisRatio ?? 0)
-                ? "text-green-600"
-                : "text-red-600"
+                ? "text-green-400"
+                : "text-red-400"
             }`}
           >
             {after.willisRatio?.toFixed(3) ?? "-"}
           </span>
           <span
             className={`text-xs font-semibold ${
-              after.verdict === "NORMAL" ? "text-green-500" : "text-red-500"
+              after.verdict === "NORMAL" ? "text-green-400" : "text-red-400"
             }`}
           >
             {after.verdict ?? "-"}
@@ -96,4 +97,4 @@ export function BeforeAfterView({ before, after }: BeforeAfterViewProps) {
       </div>
     </div>
   );
-}
+});

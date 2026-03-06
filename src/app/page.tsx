@@ -20,7 +20,7 @@ export default function HomePage() {
       {/* 새 평가 시작 버튼 */}
       <Link
         href="/assess"
-        className="mt-8 block rounded-3xl bg-gradient-to-br from-primary-600 to-primary-500 px-6 py-6 text-center shadow-glass-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
+        className="mt-8 block rounded-3xl gradient-accent px-6 py-6 text-center shadow-glass-lg transition-transform hover:scale-[1.02] active:scale-[0.98]"
       >
         <span className="text-lg font-bold text-white">새 VD 평가 시작</span>
         <span className="mt-1 block text-sm text-white/70">
@@ -30,7 +30,7 @@ export default function HomePage() {
 
       {/* 정보 카드 그리드 */}
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        <div className="glass glass-texture glass-lift shadow-glass rounded-2xl p-5">
+        <div className="metal-emboss glass-texture glass-lift shadow-glass rounded-2xl p-5">
           <h2 className="text-base font-semibold text-foreground">
             Willis 비율이란?
           </h2>
@@ -46,7 +46,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="glass glass-texture glass-lift shadow-glass rounded-2xl p-5">
+        <div className="metal-emboss glass-texture glass-lift shadow-glass rounded-2xl p-5">
           <h2 className="text-base font-semibold text-foreground">
             평가 워크플로우
           </h2>

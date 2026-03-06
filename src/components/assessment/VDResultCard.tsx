@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { VDVerdict } from "@/lib/store/assessmentStore";
 import { getDetailedAssessment, isNormalRange } from "@/lib/willis/assessVD";
 import { CheckCircle2, AlertTriangle } from "lucide-react";
@@ -7,7 +8,7 @@ interface VDResultCardProps {
   verdict: VDVerdict;
 }
 
-export function VDResultCard({ ratio, verdict }: VDResultCardProps) {
+export const VDResultCard = memo(function VDResultCard({ ratio, verdict }: VDResultCardProps) {
   const detail = getDetailedAssessment(ratio);
   const isNormal = isNormalRange(ratio);
 
@@ -29,14 +30,14 @@ export function VDResultCard({ ratio, verdict }: VDResultCardProps) {
           <div>
             <span
               className={`text-lg font-bold ${
-                isNormal ? "text-green-700" : "text-red-700"
+                isNormal ? "text-green-400" : "text-red-400"
               }`}
             >
               {verdict === "NORMAL" ? "Normal" : "Lower"}
             </span>
             <p
               className={`text-xs ${
-                isNormal ? "text-green-600" : "text-red-600"
+                isNormal ? "text-green-400" : "text-red-400"
               }`}
             >
               {detail.message}
@@ -46,7 +47,7 @@ export function VDResultCard({ ratio, verdict }: VDResultCardProps) {
         <div className="text-right">
           <span
             className={`text-2xl font-bold ${
-              isNormal ? "text-green-600" : "text-red-600"
+              isNormal ? "text-green-400" : "text-red-400"
             }`}
           >
             {ratio.toFixed(3)}
@@ -59,4 +60,4 @@ export function VDResultCard({ ratio, verdict }: VDResultCardProps) {
       </div>
     </div>
   );
-}
+});

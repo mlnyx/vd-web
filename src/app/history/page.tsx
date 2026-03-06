@@ -9,13 +9,16 @@ import { ClipboardList } from "lucide-react";
 export default function HistoryPage() {
   const [assessments, setAssessments] = useState<AssessmentRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const loadData = useCallback(async () => {
     try {
+      setLoadError(null);
       const data = await getAllAssessments();
       setAssessments(data);
-    } catch {
-      // DB 초기화 전이면 빈 배열
+    } catch (e) {
+      console.warn("[history] 평가 기록 로드 실패:", e);
+      setLoadError("평가 기록을 불러오지 못했습니다.");
     } finally {
       setLoading(false);
     }
@@ -29,6 +32,20 @@ export default function HistoryPage() {
     return (
       <div className="flex flex-1 items-center justify-center">
         <span className="text-muted-foreground">불러오는 중...</span>
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center px-6 py-20">
+        <p className="text-sm text-red-400">{loadError}</p>
+        <button
+          className="mt-4 rounded-2xl bg-primary px-6 py-2 text-sm font-semibold text-white"
+          onClick={loadData}
+        >
+          다시 시도
+        </button>
       </div>
     );
   }
@@ -75,8 +92,8 @@ export default function HistoryPage() {
                   <span
                     className={`text-lg font-bold ${
                       isNormalRange(item.initialRatio)
-                        ? "text-green-600"
-                        : "text-red-600"
+                        ? "text-green-400"
+                        : "text-red-400"
                     }`}
                   >
                     {item.initialRatio.toFixed(3)}
@@ -85,8 +102,8 @@ export default function HistoryPage() {
                 <p
                   className={`text-xs font-semibold ${
                     item.initialVerdict === "NORMAL"
-                      ? "text-green-500"
-                      : "text-red-500"
+                      ? "text-green-400"
+                      : "text-red-400"
                   }`}
                 >
                   {item.initialVerdict ?? "-"}
@@ -99,8 +116,8 @@ export default function HistoryPage() {
                 <span
                   className={`text-sm font-semibold ${
                     isNormalRange(item.verifyRatio)
-                      ? "text-green-600"
-                      : "text-red-600"
+                      ? "text-green-400"
+                      : "text-red-400"
                   }`}
                 >
                   {item.verifyRatio.toFixed(3)} ({item.verifyVerdict})

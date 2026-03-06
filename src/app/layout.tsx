@@ -1,13 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
 import { Toaster } from "sonner";
 import { AppShell } from "@/components/layout/AppShell";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Cnalytics VD",
@@ -15,13 +9,13 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "Cnalytics VD",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1B1464",
+  themeColor: "#111315",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -35,9 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${geistSans.variable} font-sans antialiased`}>
+      <body className="font-sans antialiased">
         <AppShell>{children}</AppShell>
-        <Toaster position="top-center" richColors />
+        <Toaster position="top-center" richColors theme="dark" />
       </body>
     </html>
   );

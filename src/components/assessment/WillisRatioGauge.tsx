@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { WILLIS_RANGE_MIN, WILLIS_RANGE_MAX, isNormalRange } from "@/lib/willis/assessVD";
 
 interface WillisRatioGaugeProps {
@@ -5,7 +6,7 @@ interface WillisRatioGaugeProps {
   size?: number;
 }
 
-export function WillisRatioGauge({ ratio, size = 160 }: WillisRatioGaugeProps) {
+export const WillisRatioGauge = memo(function WillisRatioGauge({ ratio, size = 160 }: WillisRatioGaugeProps) {
   const normal = isNormalRange(ratio);
   const center = size / 2;
   const radius = (size - 20) / 2;
@@ -39,7 +40,7 @@ export function WillisRatioGauge({ ratio, size = 160 }: WillisRatioGaugeProps) {
             cx={center}
             cy={center}
             r={radius}
-            stroke="oklch(0.9 0 0 / 30%)"
+            stroke="oklch(0.3 0 0 / 50%)"
             strokeWidth="8"
             fill="none"
             strokeLinecap="round"
@@ -51,7 +52,7 @@ export function WillisRatioGauge({ ratio, size = 160 }: WillisRatioGaugeProps) {
             cx={center}
             cy={center}
             r={radius}
-            stroke="rgba(34, 197, 94, 0.2)"
+            stroke="rgba(0, 214, 143, 0.15)"
             strokeWidth="10"
             fill="none"
             transform={`rotate(-135, ${center}, ${center})`}
@@ -88,7 +89,7 @@ export function WillisRatioGauge({ ratio, size = 160 }: WillisRatioGaugeProps) {
             y={center + 18}
             textAnchor="middle"
             dominantBaseline="central"
-            fill="#9CA3AF"
+            fill="#9EA4AE"
             fontSize="12"
           >
             Willis 비율
@@ -100,4 +101,4 @@ export function WillisRatioGauge({ ratio, size = 160 }: WillisRatioGaugeProps) {
       </span>
     </div>
   );
-}
+});

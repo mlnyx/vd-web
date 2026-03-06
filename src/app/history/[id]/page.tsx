@@ -112,7 +112,7 @@ export default function AssessmentDetailPage() {
           <img
             src={assessment.initialPhotoUri}
             alt="초기 촬영"
-            className="mt-2 h-48 w-full rounded-2xl object-cover"
+            className="mt-2 h-48 w-full rounded-2xl object-cover border border-white/5"
           />
         )}
         {assessment.initialRatio !== null && assessment.initialVerdict && (
@@ -135,7 +135,7 @@ export default function AssessmentDetailPage() {
             <img
               src={assessment.verifyPhotoUri}
               alt="검증 촬영"
-              className="mt-2 h-48 w-full rounded-2xl object-cover"
+              className="mt-2 h-48 w-full rounded-2xl object-cover border border-white/5"
             />
           )}
           {assessment.verifyVerdict && (
@@ -157,8 +157,8 @@ export default function AssessmentDetailPage() {
                 <span
                   className={`text-xl font-bold ${
                     isNormalRange(assessment.initialRatio)
-                      ? "text-green-600"
-                      : "text-red-600"
+                      ? "text-green-400"
+                      : "text-red-400"
                   }`}
                 >
                   {assessment.initialRatio.toFixed(3)}
@@ -167,8 +167,8 @@ export default function AssessmentDetailPage() {
                 <span
                   className={`text-xl font-bold ${
                     isNormalRange(assessment.verifyRatio)
-                      ? "text-green-600"
-                      : "text-red-600"
+                      ? "text-green-400"
+                      : "text-red-400"
                   }`}
                 >
                   {assessment.verifyRatio.toFixed(3)}
@@ -201,7 +201,7 @@ export default function AssessmentDetailPage() {
         <AlertDialogTrigger asChild>
           <Button
             variant="outline"
-            className="mt-3 w-full rounded-2xl border-red-200/50 bg-red-50/30 py-6 text-base font-semibold text-red-600 hover:bg-red-100/40"
+            className="mt-3 w-full rounded-2xl border-red-800/30 bg-red-950/30 py-6 text-base font-semibold text-red-400 hover:bg-red-100/40"
           >
             기록 삭제
           </Button>
