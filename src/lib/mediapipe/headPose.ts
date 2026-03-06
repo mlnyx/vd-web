@@ -10,6 +10,10 @@ const DEFAULT_ROLL_THRESHOLD = 5;
  * 행렬은 column-major order (OpenGL 스타일)
  */
 export function extractHeadPose(matrixData: number[]): HeadPose {
+  if (matrixData.length < 16) {
+    return { pitch: 0, yaw: 0, roll: 0 };
+  }
+
   // column-major → row 접근: M[row][col] = matrixData[col * 4 + row]
   const r00 = matrixData[0];
   const r01 = matrixData[4];

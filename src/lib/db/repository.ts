@@ -117,8 +117,8 @@ export async function getAllAssessments(): Promise<AssessmentRecord[]> {
       try {
         const patient = await database.get("patients", row.patientId);
         patientName = patient?.name;
-      } catch {
-        // 환자 삭제된 경우
+      } catch (e) {
+        console.warn("[repository] 환자 정보 조회 실패:", e);
       }
     }
 

@@ -9,7 +9,7 @@ export const WILLIS_THRESHOLD = WILLIS_RANGE_MIN;
 
 /**
  * 정상 범위 판정 유틸
- * 0.9 ≤ ratio ≤ 1.5 → 정상
+ * 0.85 ≤ ratio ≤ 1.15 → 정상
  */
 export function isNormalRange(ratio: number): boolean {
   return ratio >= WILLIS_RANGE_MIN && ratio <= WILLIS_RANGE_MAX;
@@ -17,7 +17,7 @@ export function isNormalRange(ratio: number): boolean {
 
 /**
  * VD 판정
- * 0.9 ≤ Willis 비율 ≤ 1.5 → NORMAL
+ * 0.85 ≤ Willis 비율 ≤ 1.15 → NORMAL
  * 그 외 → LOWER
  */
 export function assessVD(willisRatio: number): VDVerdict {

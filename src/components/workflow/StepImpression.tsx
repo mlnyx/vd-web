@@ -83,8 +83,8 @@ export function StepImpression() {
             <span
               className={`text-lg font-bold ${
                 initialPhoto.verdict === "NORMAL"
-                  ? "text-green-600"
-                  : "text-red-600"
+                  ? "text-green-400"
+                  : "text-red-400"
               }`}
             >
               {initialPhoto.verdict}

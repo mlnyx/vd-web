@@ -1,107 +1,75 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useCallback } from "react";
 import { useAssessmentStore } from "@/lib/store/assessmentStore";
+import { usePhotoCapture } from "@/lib/hooks/usePhotoCapture";
 import { WillisRatioGauge } from "../assessment/WillisRatioGauge";
 import { VDResultCard } from "../assessment/VDResultCard";
-import {
-  FaceLandmarkerView,
-  type FaceLandmarkerViewHandle,
-} from "../mediapipe/FaceLandmarkerView";
+import { FaceLandmarkerView } from "../mediapipe/FaceLandmarkerView";
 import type { AutoCaptureResult } from "@/lib/mediapipe/types";
 import { Button } from "@/components/ui/button";
 
-type StepPhase = "live" | "result";
-
 export function StepInitialPhoto() {
   const { nextStep, setInitialPhoto } = useAssessmentStore();
-  const [phase, setPhase] = useState<StepPhase>("live");
-  const [captureResult, setCaptureResult] =
-    useState<AutoCaptureResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const landmarkerRef = useRef<FaceLandmarkerViewHandle>(null);
 
-  const handleAutoCapture = useCallback((result: AutoCaptureResult) => {
-    setCaptureResult(result);
-    setPhase("result");
-  }, []);
+  const onConfirm = useCallback(
+    (result: AutoCaptureResult) => {
+      setInitialPhoto({
+        uri: result.imageBase64,
+        base64: result.imageBase64,
+        keypoints: {
+          leftPupil: result.keypoints.leftPupil,
+          rightPupil: result.keypoints.rightPupil,
+          subnasale: result.keypoints.subnasale,
+          rimaOris: result.keypoints.rimaOris,
+          chin: result.keypoints.chin,
+        },
+        willisRatio: result.ratio,
+        verdict: result.verdict,
+        timestamp: Date.now(),
+      });
+      nextStep();
+    },
+    [setInitialPhoto, nextStep]
+  );
 
-  const handleError = useCallback((message: string) => {
-    setError(message);
-  }, []);
-
-  const handleRetake = useCallback(() => {
-    setCaptureResult(null);
-    setError(null);
-    setPhase("live");
-    landmarkerRef.current?.resetCamera();
-  }, []);
-
-  const handleConfirm = useCallback(() => {
-    if (!captureResult) return;
-
-    setInitialPhoto({
-      uri: captureResult.imageBase64,
-      base64: captureResult.imageBase64,
-      keypoints: {
-        leftPupil: captureResult.keypoints.leftPupil,
-        rightPupil: captureResult.keypoints.rightPupil,
-        subnasale: captureResult.keypoints.subnasale,
-        rimaOris: captureResult.keypoints.rimaOris,
-        chin: captureResult.keypoints.chin,
-      },
-      willisRatio: captureResult.ratio,
-      verdict: captureResult.verdict,
-      timestamp: Date.now(),
-    });
-    nextStep();
-  }, [captureResult, setInitialPhoto, nextStep]);
+  const {
+    phase,
+    captureResult,
+    error,
+    landmarkerRef,
+    handleAutoCapture,
+    handleError,
+    handleRetake,
+    handleConfirm,
+  } = usePhotoCapture({ onConfirm });
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       {phase === "live" && (
         <div className="relative flex min-h-0 flex-1 flex-col">
-          <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-            <div className="relative min-h-0 flex-1 lg:flex-[3]">
-              <FaceLandmarkerView
-                ref={landmarkerRef}
-                onAutoCapture={handleAutoCapture}
-                onError={handleError}
-              />
+          <div className="relative min-h-0 flex-1">
+            <FaceLandmarkerView
+              ref={landmarkerRef}
+              onAutoCapture={handleAutoCapture}
+              onError={handleError}
+            />
 
-              {/* 수동 캡처 버튼 */}
-              <div className="absolute bottom-8 left-0 right-0 flex justify-center">
-                <button
-                  className="glass-heavy shadow-glass-lg flex h-16 w-16 items-center justify-center rounded-full transition-transform hover:scale-105 active:scale-95"
-                  onClick={() => landmarkerRef.current?.manualCapture()}
-                >
-                  <div className="h-12 w-12 rounded-full bg-white" />
-                </button>
-              </div>
-
-              {error && (
-                <div className="absolute top-4 right-4 left-4 rounded-2xl bg-red-600/90 px-4 py-3">
-                  <p className="text-center text-sm text-white">{error}</p>
-                </div>
-              )}
+            {/* 수동 캡처 버튼 */}
+            <div className="absolute bottom-8 left-0 right-0 flex justify-center">
+              <button
+                className="glass-heavy shadow-glass-lg flex h-16 w-16 items-center justify-center rounded-full transition-transform hover:scale-105 active:scale-95"
+                onClick={() => landmarkerRef.current?.manualCapture()}
+              >
+                <div className="h-12 w-12 rounded-full bg-white" />
+              </button>
             </div>
 
-            {/* 태블릿+ 우측 상태 패널 */}
-            <div className="glass-heavy hidden p-6 lg:flex lg:w-80 lg:flex-col lg:justify-center">
-              <h3 className="text-lg font-bold text-foreground">
-                1단계: 초기 촬영
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                얼굴을 가이드 안에 맞추면
-                <br />
-                자동으로 촬영됩니다.
-              </p>
-              <div className="mt-4 space-y-2 text-sm text-muted-foreground">
-                <p>• 밝은 환경에서 촬영</p>
-                <p>• 정면을 바라봐주세요</p>
-                <p>• 2초 카운트다운 후 자동 캡처</p>
+            {error && (
+              <div className="absolute top-4 right-4 left-4 rounded-2xl bg-red-600/90 px-4 py-3">
+                <p className="text-center text-sm text-white">{error}</p>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}
@@ -109,19 +77,17 @@ export function StepInitialPhoto() {
       {phase === "result" && captureResult && (
         <div className="flex-1 overflow-auto">
           <div className="mx-auto max-w-4xl px-6 pt-4 lg:flex lg:gap-8">
-            {/* 좌측: 사진 */}
             <div className="lg:flex-1">
               <h3 className="text-lg font-bold text-foreground">1단계 결과</h3>
               <div className="relative mt-4 overflow-hidden rounded-2xl">
                 <img
                   src={captureResult.imageBase64}
                   alt="촬영 결과"
-                  className="h-64 w-full object-cover lg:h-80"
+                  className="h-64 w-full object-cover lg:h-80 border border-white/5"
                 />
               </div>
             </div>
 
-            {/* 우측: 게이지 + 카드 + 버튼 */}
             <div className="lg:w-80">
               <div className="mt-6 flex justify-center lg:mt-0">
                 <WillisRatioGauge ratio={captureResult.ratio} />

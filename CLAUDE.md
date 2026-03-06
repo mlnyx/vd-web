@@ -40,7 +40,7 @@ npm run lint     # ESLint
 ### Willis 비율 로직 (`src/lib/willis/`)
 
 - `calculateRatio.ts` — 비율 계산, 동공간선 기울기 검증 (±5° 허용)
-- `assessVD.ts` — 판정 (0.9 ≤ ratio ≤ 1.5 → NORMAL, 그 외 → LOWER)
+- `assessVD.ts` — 판정 (0.85 ≤ ratio ≤ 1.15 (1:1 ± 15%) → NORMAL, 그 외 → LOWER)
 
 ### MediaPipe 통합 (`src/lib/mediapipe/`)
 
