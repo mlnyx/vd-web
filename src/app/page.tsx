@@ -1,20 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { CnalyticsLogo } from "@/components/brand/CnalyticsLogo";
-
 export default function HomePage() {
   return (
     <div className="mx-auto max-w-4xl overflow-auto px-6 pt-8 pb-4">
       {/* 헤더 */}
-      <div className="flex items-center gap-3">
-        <CnalyticsLogo variant="icon" size={52} />
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">VD Assessment</h1>
-          <p className="text-sm text-muted-foreground">
-            Willis 안면 비율법 기반 VD 평가
-          </p>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold text-foreground">VD Assessment</h1>
+        <p className="text-sm text-muted-foreground">
+          Willis 안면 비율법 기반 VD 평가
+        </p>
       </div>
 
       {/* 새 평가 시작 버튼 */}

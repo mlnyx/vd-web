@@ -11,17 +11,17 @@
   --font-sans: "Pretendard Variable", "Pretendard", -apple-system, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
 
-  /* Cnalytics 다크 민트 팔레트 */
-  --color-primary-50: oklch(0.20 0.02 165);
-  --color-primary-100: oklch(0.25 0.04 165);
-  --color-primary-200: oklch(0.32 0.06 165);
-  --color-primary-300: oklch(0.42 0.09 165);
-  --color-primary-400: oklch(0.55 0.12 165);
-  --color-primary-500: oklch(0.65 0.14 165);
-  --color-primary-600: oklch(0.78 0.17 165);
-  --color-primary-700: oklch(0.72 0.15 165);
-  --color-primary-800: oklch(0.85 0.12 165);
-  --color-primary-900: oklch(0.90 0.08 165);
+  /* Cnalytics 다크 틸-시안 팔레트 (#1B1464 → #5BB7D5) */
+  --color-primary-50: oklch(0.20 0.02 230);
+  --color-primary-100: oklch(0.25 0.04 230);
+  --color-primary-200: oklch(0.35 0.06 225);
+  --color-primary-300: oklch(0.45 0.08 222);
+  --color-primary-400: oklch(0.55 0.09 220);
+  --color-primary-500: oklch(0.65 0.10 220);
+  --color-primary-600: oklch(0.74 0.09 220);
+  --color-primary-700: oklch(0.80 0.08 218);
+  --color-primary-800: oklch(0.86 0.06 218);
+  --color-primary-900: oklch(0.92 0.03 220);
   --color-success: oklch(0.72 0.17 155);
   --color-warning: oklch(0.80 0.15 75);
   --color-danger: oklch(0.63 0.21 25);
@@ -71,7 +71,7 @@
   --card-foreground: oklch(0.95 0 0);
   --popover: oklch(0.24 0.005 250);
   --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.78 0.17 165);
+  --primary: oklch(0.74 0.09 220);
   --primary-foreground: oklch(0.15 0.005 250);
   --secondary: oklch(0.21 0.005 250);
   --secondary-foreground: oklch(0.90 0 0);
@@ -82,20 +82,20 @@
   --destructive: oklch(0.60 0.22 25);
   --border: oklch(1 0 0 / 8%);
   --input: oklch(0.24 0.005 250);
-  --ring: oklch(0.78 0.17 165);
-  --chart-1: oklch(0.78 0.17 165);
+  --ring: oklch(0.74 0.09 220);
+  --chart-1: oklch(0.74 0.09 220);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.17 0.005 250);
   --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.78 0.17 165);
+  --sidebar-primary: oklch(0.74 0.09 220);
   --sidebar-primary-foreground: oklch(0.15 0.005 250);
   --sidebar-accent: oklch(0.24 0.01 250);
   --sidebar-accent-foreground: oklch(0.95 0 0);
   --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.78 0.17 165);
+  --sidebar-ring: oklch(0.74 0.09 220);
 }
 
 .dark {
@@ -105,7 +105,7 @@
   --card-foreground: oklch(0.95 0 0);
   --popover: oklch(0.24 0.005 250);
   --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.78 0.17 165);
+  --primary: oklch(0.74 0.09 220);
   --primary-foreground: oklch(0.15 0.005 250);
   --secondary: oklch(0.21 0.005 250);
   --secondary-foreground: oklch(0.90 0 0);
@@ -116,20 +116,20 @@
   --destructive: oklch(0.60 0.22 25);
   --border: oklch(1 0 0 / 8%);
   --input: oklch(0.24 0.005 250);
-  --ring: oklch(0.78 0.17 165);
-  --chart-1: oklch(0.78 0.17 165);
+  --ring: oklch(0.74 0.09 220);
+  --chart-1: oklch(0.74 0.09 220);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
   --sidebar: oklch(0.17 0.005 250);
   --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.78 0.17 165);
+  --sidebar-primary: oklch(0.74 0.09 220);
   --sidebar-primary-foreground: oklch(0.15 0.005 250);
   --sidebar-accent: oklch(0.24 0.01 250);
   --sidebar-accent-foreground: oklch(0.95 0 0);
   --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.78 0.17 165);
+  --sidebar-ring: oklch(0.74 0.09 220);
 }
 
 @layer base {
@@ -223,6 +223,6 @@
 
   /* CTA 그라데이션 */
   .gradient-accent {
-    background: linear-gradient(135deg, #00D68F, #00B377);
+    background: linear-gradient(135deg, #5BB7D5, #3A8FBA);
   }
 }

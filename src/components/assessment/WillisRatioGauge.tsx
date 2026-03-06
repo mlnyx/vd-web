@@ -52,7 +52,7 @@ export const WillisRatioGauge = memo(function WillisRatioGauge({ ratio, size = 1
             cx={center}
             cy={center}
             r={radius}
-            stroke="rgba(0, 214, 143, 0.15)"
+            stroke="rgba(91, 183, 213, 0.2)"
             strokeWidth="10"
             fill="none"
             transform={`rotate(-135, ${center}, ${center})`}

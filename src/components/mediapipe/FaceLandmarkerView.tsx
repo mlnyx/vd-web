@@ -108,7 +108,7 @@ export const FaceLandmarkerView = forwardRef<
         <div className="glass-dark absolute inset-0 z-20 flex flex-col items-center justify-center">
           <p className="px-6 text-center text-sm text-red-400">{initError}</p>
           <button
-            className="mt-4 rounded-2xl bg-white px-6 py-2 text-sm font-semibold text-gray-800"
+            className="mt-4 rounded-xl bg-white/10 border border-white/15 px-6 py-2 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/15"
             onClick={handleRetry}
           >
             다시 시도

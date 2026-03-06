@@ -58,10 +58,10 @@ export function StepInitialPhoto() {
             {/* 수동 캡처 버튼 */}
             <div className="absolute bottom-8 left-0 right-0 flex justify-center">
               <button
-                className="glass-heavy shadow-glass-lg flex h-16 w-16 items-center justify-center rounded-full transition-transform hover:scale-105 active:scale-95"
+                className="flex h-[72px] w-[72px] items-center justify-center rounded-full border-[3px] border-white/30 bg-black/40 backdrop-blur-sm transition-transform hover:scale-105 active:scale-90"
                 onClick={() => landmarkerRef.current?.manualCapture()}
               >
-                <div className="h-12 w-12 rounded-full bg-white" />
+                <div className="h-[54px] w-[54px] rounded-full bg-white" />
               </button>
             </div>
 

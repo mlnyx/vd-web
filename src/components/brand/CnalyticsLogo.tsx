@@ -38,7 +38,6 @@ export function CnalyticsLogo({
     );
   }
 
-  // horizontal: 아이콘+텍스트 가로형
   return (
     <Image
       src="/images/logo-horizontal.png"

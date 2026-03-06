@@ -19,7 +19,7 @@ export function Sidebar() {
     <aside className="glass-heavy shadow-glass hidden lg:flex lg:w-60 lg:flex-col">
       <div className="px-3 py-5">
         <div className="px-3">
-          <CnalyticsLogo variant="horizontal" size={28} />
+          <CnalyticsLogo variant="horizontal" size={24} />
           <p className="mt-1 text-xs text-muted-foreground">VD Assessment</p>
         </div>
       </div>
@@ -36,7 +36,7 @@ export function Sidebar() {
               href={item.href}
               className={`mb-1 flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition-all ${
                 isActive
-                  ? "glass bg-primary-100/50 shadow-glass text-primary-700"
+                  ? "glass bg-primary-400/15 shadow-glass text-primary-600"
                   : "text-muted-foreground hover:glass-subtle hover:text-foreground"
               }`}
             >

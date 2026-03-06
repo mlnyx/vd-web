@@ -147,17 +147,17 @@ export function drawOverlay(
   const guideRy = width * GUIDE_RY_RATIO;
   const pillY = guideCy - guideRy + 24 * s;
 
-  drawGlassPill(ctx, pillX, pillY, pillW, pillH, verdict === "NORMAL" ? "rgba(34,197,94,0.4)" : "rgba(239,68,68,0.4)");
+  drawGlassPill(ctx, pillX, pillY, pillW, pillH, verdict === "NORMAL" ? "rgba(91,183,213,0.4)" : "rgba(239,68,68,0.4)");
 
   // "Willis Ratio" 라벨
-  ctx.font = `${9 * s}px -apple-system, 'SF Pro Text', sans-serif`;
+  ctx.font = `${9 * s}px 'Pretendard Variable', -apple-system, sans-serif`;
   ctx.fillStyle = "rgba(255,255,255,0.55)";
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
   ctx.fillText("Willis Ratio", width / 2, pillY + 7 * s);
 
   // 비율 값
-  ctx.font = `bold ${18 * s}px -apple-system, 'SF Pro Display', sans-serif`;
+  ctx.font = `bold ${18 * s}px 'Pretendard Variable', -apple-system, sans-serif`;
   ctx.fillStyle = verdictColor;
   ctx.textBaseline = "bottom";
   ctx.fillText(ratio.toFixed(3), width / 2, pillY + pillH - 5 * s);
@@ -179,14 +179,14 @@ export function drawGuideEllipse(
   const gap = (Math.PI * 2) / segments;
   const arcLen = gap * 0.55;
 
-  const color = detected ? "rgba(34,197,94,0.7)" : "rgba(255,255,255,0.3)";
+  const color = detected ? "rgba(91,183,213,0.7)" : "rgba(255,255,255,0.3)";
 
   ctx.save();
   ctx.lineCap = "round";
   ctx.lineWidth = 3.5 * s;
   ctx.strokeStyle = color;
   if (detected) {
-    ctx.shadowColor = "rgba(34,197,94,0.5)";
+    ctx.shadowColor = "rgba(91,183,213,0.5)";
     ctx.shadowBlur = 12 * s;
   }
 
@@ -211,7 +211,7 @@ export function drawNoFaceHint(
   const icon = "👤";
   const fullText = `${icon}  ${text}`;
 
-  ctx.font = `${14 * s}px -apple-system, 'SF Pro Text', sans-serif`;
+  ctx.font = `${14 * s}px 'Pretendard Variable', -apple-system, sans-serif`;
   const measured = ctx.measureText(fullText);
   const boxW = measured.width + 40 * s;
   const boxH = 40 * s;
@@ -248,7 +248,7 @@ export function drawPoseHint(
 
   const s = getScale(width);
   const fullText = `${icon}  ${message}`;
-  ctx.font = `bold ${14 * s}px -apple-system, 'SF Pro Text', sans-serif`;
+  ctx.font = `bold ${14 * s}px 'Pretendard Variable', -apple-system, sans-serif`;
   const measured = ctx.measureText(fullText);
   const boxW = measured.width + 40 * s;
   const boxH = 40 * s;
@@ -301,16 +301,16 @@ export function drawCountdown(
   const endAngle = startAngle + progress * Math.PI * 2;
   ctx.beginPath();
   ctx.arc(cx, cy, outerR - ringWidth, startAngle, endAngle);
-  ctx.strokeStyle = "#22C55E";
+  ctx.strokeStyle = "#5BB7D5";
   ctx.lineWidth = ringWidth;
   ctx.lineCap = "round";
-  ctx.shadowColor = "#22C55E";
+  ctx.shadowColor = "#5BB7D5";
   ctx.shadowBlur = 8 * s;
   ctx.stroke();
 
   // 숫자
   ctx.shadowBlur = 0;
-  ctx.font = `bold ${28 * s}px -apple-system, 'SF Pro Display', sans-serif`;
+  ctx.font = `bold ${28 * s}px 'Pretendard Variable', -apple-system, sans-serif`;
   ctx.fillStyle = "#FFFFFF";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";

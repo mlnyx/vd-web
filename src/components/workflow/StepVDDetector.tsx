@@ -38,7 +38,7 @@ export function StepVDDetector() {
 
       {/* VD Detector 가이드 */}
       <div className="mt-6 flex flex-1 flex-col items-center">
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-100/60 backdrop-blur-sm">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/6 border border-white/10">
           <Wrench className="size-8 text-primary-600" />
         </div>
         <h3 className="mt-4 text-xl font-bold text-foreground">

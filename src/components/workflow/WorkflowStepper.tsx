@@ -13,7 +13,7 @@ interface WorkflowStepperProps {
 
 export function WorkflowStepper({ currentStep }: WorkflowStepperProps) {
   return (
-    <div className="glass-heavy flex items-center justify-between px-4 py-3">
+    <div className="flex items-center justify-between border-b border-white/6 bg-[#16181C] px-4 py-3">
       {STEPS.map((step, index) => {
         const stepNumber = index + 1;
         const isActive = stepNumber === currentStep;
@@ -24,10 +24,10 @@ export function WorkflowStepper({ currentStep }: WorkflowStepperProps) {
             <div
               className={`flex h-8 w-8 items-center justify-center rounded-full transition-all ${
                 isActive
-                  ? "bg-gradient-to-br from-primary-600 to-primary-500 shadow-glass"
+                  ? "bg-gradient-to-br from-[#5BB7D5] to-[#3A8FBA] shadow-[0_0_12px_rgba(91,183,213,0.4)]"
                   : isCompleted
                     ? "bg-success/80"
-                    : "glass-subtle"
+                    : "bg-white/6 border border-white/8"
               }`}
             >
               {isCompleted ? (
