@@ -24,6 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { TopBar } from "@/components/layout/TopBar";
 
 export default function AssessmentDetailPage() {
   const params = useParams<{ id: string }>();
@@ -92,16 +93,10 @@ export default function AssessmentDetailPage() {
   const dateStr = `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
 
   return (
-    <div className="mx-auto max-w-2xl overflow-auto px-6 pt-4 pb-8">
-      {/* 헤더 */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-bold text-foreground">
-            {assessment.patientName ?? "환자 미등록"}
-          </h1>
-          <p className="text-sm text-muted-foreground">{dateStr}</p>
-        </div>
-      </div>
+    <div>
+      <TopBar title={assessment.patientName ?? "평가 상세"} />
+      <div className="mx-auto max-w-2xl overflow-auto px-6 pt-4 pb-8">
+      <p className="text-sm text-muted-foreground">{dateStr}</p>
 
       {/* 초기 촬영 결과 */}
       <div className="mt-6">
@@ -224,6 +219,7 @@ export default function AssessmentDetailPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      </div>
     </div>
   );
 }

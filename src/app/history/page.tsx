@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getAllAssessments, type AssessmentRecord } from "@/lib/db/repository";
 import { isNormalRange } from "@/lib/willis/assessVD";
 import { ClipboardList } from "lucide-react";
+import { TopBar } from "@/components/layout/TopBar";
 
 export default function HistoryPage() {
   const [assessments, setAssessments] = useState<AssessmentRecord[]>([]);
@@ -65,8 +66,9 @@ export default function HistoryPage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-3 px-4 pt-4 pb-6">
-      <h1 className="mb-4 text-xl font-bold text-foreground">히스토리</h1>
+    <div>
+      <TopBar title="히스토리" />
+      <div className="mx-auto max-w-4xl space-y-3 px-4 pt-4 pb-6">
       {assessments.map((item) => {
         const date = new Date(item.createdAt);
         const dateStr = `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
@@ -127,6 +129,7 @@ export default function HistoryPage() {
           </Link>
         );
       })}
+      </div>
     </div>
   );
 }

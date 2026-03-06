@@ -2,13 +2,15 @@
 
 import { WILLIS_RANGE_MIN, WILLIS_RANGE_MAX } from "@/lib/willis/assessVD";
 import { CnalyticsLogo } from "@/components/brand/CnalyticsLogo";
+import { TopBar } from "@/components/layout/TopBar";
 
 const FEEDBACK_URL = "https://forms.gle/BWv3NgoutNk3hUFu9";
 
 export default function SettingsPage() {
   return (
-    <div className="mx-auto max-w-4xl overflow-auto px-6 pt-4 pb-8">
-      <h1 className="mb-4 text-xl font-bold text-foreground">설정</h1>
+    <div>
+      <TopBar title="설정" />
+      <div className="mx-auto max-w-4xl overflow-auto px-6 pt-4 pb-8">
 
       <div className="glass shadow-glass rounded-2xl p-4">
         <h2 className="text-base font-semibold text-foreground">앱 정보</h2>
@@ -99,6 +101,7 @@ export default function SettingsPage() {
           <p className="text-sm text-muted-foreground">
             • 크롭된 정면 얼굴 사진이 최고 성능 (90% 정확도)
           </p>
+        </div>
         </div>
       </div>
     </div>

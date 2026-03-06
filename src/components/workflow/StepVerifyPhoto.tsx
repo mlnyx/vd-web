@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef, useEffect } from "react";
 import { useAssessmentStore } from "@/lib/store/assessmentStore";
 import { usePhotoCapture } from "@/lib/hooks/usePhotoCapture";
 import { WillisRatioGauge } from "../assessment/WillisRatioGauge";
@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 export function StepVerifyPhoto() {
   const { nextStep, prevStep, setVerifyPhoto, initialPhoto } =
     useAssessmentStore();
+  const buttonsRef = useRef<HTMLDivElement>(null);
 
   const onConfirm = useCallback(
     (result: AutoCaptureResult) => {
@@ -55,6 +56,16 @@ export function StepVerifyPhoto() {
       timestamp: 0,
     };
   }, [captureResult]);
+
+  // 결과 화면 자동 스크롤
+  useEffect(() => {
+    if (phase === "result" && captureResult) {
+      const timer = setTimeout(() => {
+        buttonsRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, captureResult]);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -130,7 +141,7 @@ export function StepVerifyPhoto() {
                 />
               </div>
 
-              <div className="mt-6 space-y-3 pb-8">
+              <div ref={buttonsRef} className="mt-6 space-y-3 pb-8">
                 <Button
                   className="w-full rounded-2xl py-6 text-base font-bold"
                   onClick={handleConfirm}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useRef, useEffect } from "react";
 import { useAssessmentStore } from "@/lib/store/assessmentStore";
 import { usePhotoCapture } from "@/lib/hooks/usePhotoCapture";
 import { WillisRatioGauge } from "../assessment/WillisRatioGauge";
@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 
 export function StepInitialPhoto() {
   const { nextStep, setInitialPhoto } = useAssessmentStore();
+  const resultRef = useRef<HTMLDivElement>(null);
+  const buttonsRef = useRef<HTMLDivElement>(null);
 
   const onConfirm = useCallback(
     (result: AutoCaptureResult) => {
@@ -43,6 +45,16 @@ export function StepInitialPhoto() {
     handleRetake,
     handleConfirm,
   } = usePhotoCapture({ onConfirm });
+
+  // 결과 화면 자동 스크롤
+  useEffect(() => {
+    if (phase === "result" && captureResult) {
+      const timer = setTimeout(() => {
+        buttonsRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, captureResult]);
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -88,7 +100,7 @@ export function StepInitialPhoto() {
               </div>
             </div>
 
-            <div className="lg:w-80">
+            <div ref={resultRef} className="lg:w-80">
               <div className="mt-6 flex justify-center lg:mt-0">
                 <WillisRatioGauge ratio={captureResult.ratio} />
               </div>
@@ -100,7 +112,7 @@ export function StepInitialPhoto() {
                 />
               </div>
 
-              <div className="mt-6 space-y-3 pb-8">
+              <div ref={buttonsRef} className="mt-6 space-y-3 pb-8">
                 <Button
                   className="w-full rounded-2xl py-6 text-base font-bold"
                   onClick={handleConfirm}
